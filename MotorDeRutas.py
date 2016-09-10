@@ -1,11 +1,13 @@
 from config import *
 import googlemaps
+from Ruta import Ruta
+from Trayecto import Trayecto
 
 class MotorDeRutas:
 
     def __init__(self):
-        self.trayectos = []
-        gmaps=googlemaps.Client(key=KEY) #inicializa la app para consultar API
+        self.trayectos = {}
+        self.gmaps = googlemaps.Client(key=KEY) #inicializa la app para consultar API
 
 
     def crear_trayecto(self, origen, destino, nombre):
@@ -16,24 +18,34 @@ class MotorDeRutas:
         distintas. Además cada trayecto tiene un nombre que lo identifica.
         :return: Trayecto
         '''
-       #try:
-        if origen != destino:
-            #aca debería ir otro try
-            ruta = Ruta(origen, destino)
-            trayecto = Trayecto(nombre, ruta)
-            trayectos.append(trayecto)
+        if origen == destino:
+            raise RuntimeError("Origen y destino deben ser diferentes.")
 
-        #except:
-            #print "Misma ciudad de origen y destino"
+        #aca debería ir otro try?
+
+        data = self.gmaps.distance_matrix(origen, destino)
+
+        distancia = data['rows'][0]['elements'][0]['distance']['value']
+        tiempo = data['rows'][0]['elements'][0]['duration']['value']
+        ruta = Ruta(origen, destino, distancia, tiempo)
+
+        self.trayectos[nombre] = Trayecto(nombre, ruta)
 
     def agregar_ciudad(self, trayecto, ciudad):
         '''
-        Agregar una ciudad al nal de un trayecto: Dado un trayecto y el nombre de una
+        Agregar una ciudad al final de un trayecto: Dado un trayecto y el nombre de una
         ciudad, debe agregar la ciudad al final del trayecto, si no es posible debe mostrar
         un mensaje de error.
         :param trayecto:
+        :param ciudad:
         :return:
         '''
+        if trayecto not in self.trayectos.keys():
+            raise IndexError('Trayecto no encontrado.')
+
+        ruta = Ruta(self.trayectos[trayecto].ultima_ciudad(), ciudad)
+
+        self.trayectos[trayecto].rutas.append(ruta)
 
     def agregar_parada(self, trayecto, antesDeCiudad, parada):
         '''
@@ -43,3 +55,7 @@ class MotorDeRutas:
         hay rutas para que el trayecto nal sea válido.
         :return:
         '''
+
+if __name__ == '__main__':
+    motor = MotorDeRutas()
+

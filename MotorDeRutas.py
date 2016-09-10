@@ -63,6 +63,82 @@ class MotorDeRutas:
         :return:
         '''
 
+    def concatenar(self, trayectoInicial, trayectoFinal):
+        '''
+        Concatenar dos trayectos: Dados dos trayectos cualquiera concatenarlos si existe
+        una ruta entre la última ciudad del primer trayecto y la primera ciudad del segundo
+        trayecto. En caso de error se debe mostrar un mensaje.
+        :param trayectoInicial:
+        :param trayectoFinal:
+        :return:
+        '''
+
+    def comparar(self, trayecto, otroTrayecto):
+        '''
+        Comparar dos trayectos: Dados dos trayectos los debe poder comparar por distan-
+        cia y por tiempo, para lo cual se usarán los parámetros: "d" para comparar por
+        distancias y "t" para comparar por tiempo.
+        :param trayecto:
+        :param otroTrayecto:
+        :return:
+        '''
+
+    def mostrar(self, trayecto):
+        '''
+        Mostrar un trayecto: Debe mostrar el nombre o identificador del trayecto y la
+        lista ordenada de ciudades, la distancia total (suma de las rutas entre ciudades
+        consecutivas) y tiempo total estimado de viaje (suma de los tiempos de cada ruta)
+        con el siguiente formato:
+            <nombre>: <ciudad1>, <ciudad2>,...,<ciudadn>
+            distancia: <distancia en km> km
+            tiempo estimado de viaje: <dias> días, <horas>, hs
+        :param trayecto:
+        :return:
+        '''
+
+    def mostrar_rutas(self, trayecto):
+        '''
+        Mostrar rutas: Dado un trayecto debe mostrar todas las rutas que forman el trayecto
+        con el siguiente formato:
+            <origen 1> - <destino 1>
+            <distancia en km> km
+            <dias> días, <horas> hs
+            <línea en blanco>
+            <destino 1> - <destino 2>
+            <distancia en km> km
+            <dias> días, <horas> hs
+        :param trayecto:
+        :return:
+        '''
+
+    def listar(self):
+        '''
+        Listar los trayectos calculados: Debe listar los nombres de los trayectos ya calculados
+        que se encuentran en el sistema.
+        :return:
+        '''
+
+    def guardar(self):
+        '''
+        Almacenar en disco los trayectos calculados: Debe permitir almacenar un trayecto
+        dado su nombre o todos los trayectos si no se especica un trayecto particular.
+        :return:
+        '''
+
+    def recuperar(self):
+        '''
+        Recuperar de disco los trayectos almacenados: Debe recuperar todos los trayectos
+        almacenados en disco
+        :return:
+        '''
+
+    def esta_guardado(self):
+        '''
+        Verifica si todos los trayectos están persistidos en disco.
+        :return: bool
+        '''
+
+
 if __name__ == '__main__':
     motor = MotorDeRutas()
 

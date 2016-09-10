@@ -13,13 +13,3 @@ class Trayecto:
 
     def ciudad_existe(self, ciudad):
         return [ruta for ruta in self.rutas if ruta.origen == ciudad or ruta.destino == ciudad]
-
-if __name__ == '__main__':
-
-    trayecto = Trayecto()
-
-    ruta = Ruta('Buenos Aires', 'La Plata')
-    trayecto.rutas.append(ruta)
-
-    print('Encontre La Plata' if trayecto.ciudad_existe('La Plata') else '')
-    print('Encontre Cordoba' if trayecto.ciudad_existe('Cordoba') else '')

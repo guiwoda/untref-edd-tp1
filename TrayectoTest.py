@@ -7,10 +7,8 @@ from Trayecto import Trayecto
 class TrayectoTest(unittest.TestCase):
 
     def setUp(self):
-        self.trayecto = Trayecto()
-
-        self.trayecto.rutas.append(Ruta('Buenos Aires', 'La Plata'))
-        self.trayecto.rutas.append(Ruta('La Plata', 'Bahia Blanca'))
+        self.trayecto = Trayecto('Trayecto de prueba', Ruta('Buenos Aires', 'La Plata', '58 km', '1 hr'))
+        self.trayecto.rutas.append(Ruta('La Plata', 'Bahia Blanca', '46 km', '4 hr'))
 
     def test_devuelve_la_ultima_ciudad(self):
         self.assertEqual('Bahia Blanca', self.trayecto.ultima_ciudad())

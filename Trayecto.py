@@ -3,10 +3,11 @@ from Ruta import *
 
 class Trayecto:
 
-    def __init__(self):
-        self.rutas = []
-        self.distaciaTotal = 0
-        self.tiempoTotal = 0
+    def __init__(self, nombre, ruta):
+        self.nombre = nombre
+        self.rutas = ['ruta']
+        self.distaciaTotal = ruta.distancia
+        self.tiempoTotal = ruta.tiempo
 
     def ultima_ciudad(self):
         return self.rutas[-1].destino

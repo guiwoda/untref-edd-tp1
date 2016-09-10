@@ -1,10 +1,14 @@
+from config import *
+import googlemaps
+
 class MotorDeRutas:
 
     def __init__(self):
         self.trayectos = []
+        gmaps=googlemaps.Client(key=KEY) #inicializa la app para consultar API
 
 
-    def crear_trayecto(self, origen, destino):
+    def crear_trayecto(self, origen, destino, nombre):
         '''
         Crear un trayecto a partir de dos ciudades: Dado el nombre de dos ciudades, debe
         buscar en la API de Google si hay un camino entre los puntos dados, y si no hay
@@ -12,6 +16,15 @@ class MotorDeRutas:
         distintas. Además cada trayecto tiene un nombre que lo identifica.
         :return: Trayecto
         '''
+       #try:
+        if origen != destino:
+            #aca debería ir otro try
+            ruta = Ruta(origen, destino)
+            trayecto = Trayecto(nombre, ruta)
+            trayectos.append(trayecto)
+
+        #except:
+            #print "Misma ciudad de origen y destino"
 
     def agregar_ciudad(self, trayecto, ciudad):
         '''

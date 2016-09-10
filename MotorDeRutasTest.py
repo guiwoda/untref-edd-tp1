@@ -19,5 +19,14 @@ class MotorDeRutasTest(unittest.TestCase):
         with self.assertRaises(RutaException):
             self.motor.crear_trayecto('Buenos Aires, Argentina', 'Reykjavik, Islandia', 'islandia')
 
+    def test_muestra_trayectos(self):
+        self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
+
+        self.assertEqual('''bs_as_la_plata: Buenos Aires, La Plata
+distancia: 58158
+tiempo estimado de viaje: 3366''',
+            self.motor.mostrar('bs_as_la_plata')
+        )
+
 if __name__ == '__main__':
     unittest.main()

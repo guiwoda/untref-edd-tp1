@@ -1,3 +1,6 @@
+import functools
+
+
 class Trayecto:
 
     def __init__(self, nombre, ruta):
@@ -20,3 +23,17 @@ class Trayecto:
         :return: boolean
         '''
         return [ruta for ruta in self.rutas if ruta.origen == ciudad or ruta.destino == ciudad]
+
+    def __str__(self):
+        salida = self.nombre + ': '
+
+        for ruta in self.rutas:
+            salida += ruta.origen + ', '
+
+        salida += self.ultima_ciudad() + '\n'
+
+        salida += 'distancia: ' + str(self.distaciaTotal) + '\n'
+        salida += 'tiempo estimado de viaje: ' + str(self.tiempoTotal)
+
+        return salida
+

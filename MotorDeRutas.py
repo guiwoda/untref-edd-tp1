@@ -95,6 +95,10 @@ class MotorDeRutas:
         :param trayecto:
         :return:
         '''
+        if not trayecto in self.trayectos.keys():
+            raise KeyError("El trayecto %s no existe" % trayecto)
+
+        return str(self.trayectos[trayecto])
 
     def mostrar_rutas(self, trayecto):
         '''

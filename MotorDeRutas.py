@@ -1,3 +1,4 @@
+from RutaException import RutaException
 from config import *
 import googlemaps
 from Ruta import Ruta
@@ -19,17 +20,23 @@ class MotorDeRutas:
         :return: Trayecto
         '''
         if origen == destino:
-            raise RuntimeError("Origen y destino deben ser diferentes.")
+            raise RutaException.misma_ciudad()
 
         #aca debería ir otro try?
 
         data = self.gmaps.distance_matrix(origen, destino)
+
+        if data['rows'][0]['elements'][0]['status'] != 'OK':
+            raise RutaException.ciudades_desconectadas(origen, destino)
 
         distancia = data['rows'][0]['elements'][0]['distance']['value']
         tiempo = data['rows'][0]['elements'][0]['duration']['value']
         ruta = Ruta(origen, destino, distancia, tiempo)
 
         self.trayectos[nombre] = Trayecto(nombre, ruta)
+
+        return self.trayectos[nombre]
+
 
     def agregar_ciudad(self, trayecto, ciudad):
         '''

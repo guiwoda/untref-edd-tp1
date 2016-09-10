@@ -29,8 +29,8 @@ class MotorDeRutas:
         if data['rows'][0]['elements'][0]['status'] != 'OK':
             raise RutaException.ciudades_desconectadas(origen, destino)
 
-        distancia = data['rows'][0]['elements'][0]['distance']['value']
-        tiempo = data['rows'][0]['elements'][0]['duration']['value']
+        distancia = calcular_distancia(data)
+        tiempo = calcular_tiempo(data)
         ruta = Ruta(origen, destino, distancia, tiempo)
 
         self.trayectos[nombre] = Trayecto(nombre, ruta)
@@ -50,7 +50,11 @@ class MotorDeRutas:
         if trayecto not in self.trayectos.keys():
             raise IndexError('Trayecto no encontrado.')
 
-        ruta = Ruta(self.trayectos[trayecto].ultima_ciudad(), ciudad)
+        #Agregar Try que chequee ruta
+        data = self.gmaps.distance_matrix(ultima_ciudad, ciudad)
+        distancia = calcular_distancia(data)
+        tiempo = calcular_tiempo(data)
+        ruta = Ruta(self.trayectos[trayecto].ultima_ciudad(), ciudad, distancia, tiempo)
 
         self.trayectos[trayecto].rutas.append(ruta)
 
@@ -141,6 +145,15 @@ class MotorDeRutas:
         Verifica si todos los trayectos están persistidos en disco.
         :return: bool
         '''
+
+
+    def calcular_distancia(self, data):
+        distancia = data['rows'][0]['elements'][0]['distance']['value']
+        return distancia
+
+    def calcular_tiempo(self, data):
+        tiempo = data['rows'][0]['elements'][0]['duration']['value']
+        return tiempo
 
 
 if __name__ == '__main__':

@@ -22,32 +22,25 @@ class MotorDeRutasTest(unittest.TestCase):
 
     def test_agrega_ciudad_a_trayecto(self):
         trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
-        self.motor.agregar_ciudad(trayecto, 'Quilmes')
+        self.motor.agregar_ciudad(trayecto.nombre, 'Quilmes')
 
-        print('test_agrega_ciudad_a_trayecto ')
-        for ruta in trayecto.rutas:
-            print ('Ruta => Origen: ', ruta.origen, 'Destino: ', ruta.destino)
-        #Lo hice re cabeza
-        self.assertTrue(True if trayecto.nombre in self.motor.trayectos else False)
+        self.assertTrue(trayecto.nombre in self.motor.trayectos)
 
     def test_falla_cuando_la_ciudad_no_existe_en_trayecto(self):
+        trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
+
         with self.assertRaises(TrayectoException):
-            trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
-            self.motor.agregar_parada(trayecto, 'Tandil', 'Quilmes')
+            self.motor.agregar_parada(trayecto.nombre, 'Tandil', 'Quilmes')
 
     def test_agrega_parada_a_trayecto(self):
         trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
-        self.motor.agregar_ciudad(trayecto, 'Tandil')
-        self.motor.agregar_parada(trayecto, 'La Plata', 'Quilmes')
+        self.motor.agregar_ciudad(trayecto.nombre, 'Tandil')
+        self.motor.agregar_parada(trayecto.nombre, 'La Plata', 'Quilmes')
 
     def test_concatena_trayectos(self):
         trayectoInicial = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'trayecto_inicial')
         trayectoFinal = self.motor.crear_trayecto('Quilmes', 'Tandil', 'trayecto_final')
-        self.motor.concatenar(trayectoInicial, trayectoFinal)
-
-        print('test_concatena_trayectos ')
-        for ruta in trayectoInicial.rutas:
-            print ('Ruta => Origen: ', ruta.origen, 'Destino: ', ruta.destino)
+        self.motor.concatenar(trayectoInicial.nombre, trayectoFinal.nombre)
 
         self.assertTrue(len(trayectoInicial.rutas) == 3)
 

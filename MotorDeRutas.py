@@ -45,18 +45,18 @@ class MotorDeRutas:
         :param ciudad:
         :return:
         '''
-        if  trayecto.nombre not in self.trayectos:
+        if  trayecto not in self.trayectos:
             raise IndexError('Trayecto no encontrado.')
 
-        data = self.gmaps.distance_matrix(self.trayectos[trayecto.nombre].ultima_ciudad(), ciudad)
+        data = self.gmaps.distance_matrix(self.trayectos[trayecto].ultima_ciudad(), ciudad)
 
         if data['rows'][0]['elements'][0]['status'] != 'OK':
-            raise RutaException.ciudades_desconectadas(self.trayectos[trayecto.nombre].ultima_ciudad(), ciudad)
+            raise RutaException.ciudades_desconectadas(self.trayectos[trayecto].ultima_ciudad(), ciudad)
 
         distancia, tiempo = (self.calcular_distancia_tiempo(data))
-        ruta = Ruta(self.trayectos[trayecto.nombre].ultima_ciudad(), ciudad, distancia, tiempo)
+        ruta = Ruta(self.trayectos[trayecto].ultima_ciudad(), ciudad, distancia, tiempo)
 
-        self.trayectos[trayecto.nombre].rutas.append(ruta)
+        self.trayectos[trayecto].rutas.append(ruta)
 
     def agregar_parada(self, trayecto, destinoIntermedio, parada):
         '''
@@ -67,10 +67,10 @@ class MotorDeRutas:
         :return:
         '''
 
-        if trayecto.nombre not in self.trayectos:
+        if trayecto not in self.trayectos:
             raise IndexError('Trayecto no encontrado.')
 
-        if not self.trayectos[trayecto.nombre].ciudad_existe(destinoIntermedio):
+        if not self.trayectos[trayecto].ciudad_existe(destinoIntermedio):
             raise TrayectoException.ciudad_inexistente_en_trayecto(destinoIntermedio, trayecto)
 
         #Chequeo que exista ruta de Parada a DestinoIntermedio
@@ -80,7 +80,7 @@ class MotorDeRutas:
             raise RutaException.ciudades_desconectadas(parada, destinoIntermedio)
 
         #Chequeo que exista ruta de Origen a Parada
-        rutaActual = self.trayectos[trayecto.nombre].devuelve_ruta_de_destinoIntermedio(destinoIntermedio)
+        rutaActual = self.trayectos[trayecto].devuelve_ruta_de_destinoIntermedio(destinoIntermedio)
         data2 = self.gmaps.distance_matrix(rutaActual.origen, parada)
 
         if data2['rows'][0]['elements'][0]['status'] != 'OK':
@@ -98,16 +98,16 @@ class MotorDeRutas:
         #concatenar listas con + e indices y slides y crear nueva lista
 
         #Consulto posicion de Ruta inicial
-        posicionRutaActual = self.trayectos[trayecto.nombre].consultar_posicion_ciudad(destinoIntermedio)
+        posicionRutaActual = self.trayectos[trayecto].consultar_posicion_ciudad(destinoIntermedio)
         #Reemplazo ruta origen-destinoIntermedio por origen-parada
-        self.trayectos[trayecto.nombre].rutas[posicionRutaActual]=rutaOrigenAParada
+        self.trayectos[trayecto].rutas[posicionRutaActual]=rutaOrigenAParada
 
         #Reemplazo ruta origen-destinoIntermedio por origen-parada y muevo un lugar lista
-        self.trayectos[trayecto.nombre].rutas.insert(posicionRutaActual+1, rutaParadaADestinoIntermedio)
+        self.trayectos[trayecto].rutas.insert(posicionRutaActual+1, rutaParadaADestinoIntermedio)
 
         #self.trayectos[trayecto].rutas = self.rutas[:posicionRutaActual] + [rutaOrigenAParada] + a[index:]
 
-    def concatenar(self, trayectoInicial, trayectoFinal):
+    def concatenar(self, inicial, final):
         '''
         Concatenar dos trayectos: Dados dos trayectos cualquiera concatenarlos si existe
         una ruta entre la última ciudad del primer trayecto y la primera ciudad del segundo
@@ -115,10 +115,14 @@ class MotorDeRutas:
         :param trayectoInicial:
         :param trayectoFinal:
         :return:
-
-        if trayectoInicial.nombre or trayectoFinal.nombre not in self.trayectos:
+        '''
+        if inicial not in self.trayectos or final not in self.trayectos:
             raise IndexError('Trayecto no encontrado.')
-'''
+
+
+        trayectoInicial = self.trayectos[inicial]
+        trayectoFinal   = self.trayectos[final]
+
         # Chequeo que exista ruta entre ùltima ciudad de TrInicial y primera ciudad de TrFinal
         data = self.gmaps.distance_matrix(trayectoInicial.rutas[-1].destino, trayectoFinal.rutas[-1].origen)
 
@@ -155,10 +159,10 @@ class MotorDeRutas:
         :param trayecto:
         :return:
         '''
-        if not trayecto.nombre in self.trayectos:
+        if not trayecto in self.trayectos:
             raise KeyError("El trayecto %s no existe" % trayecto)
 
-        return str(self.trayectos[trayecto.nombre])
+        return str(self.trayectos[trayecto])
 
     def mostrar_rutas(self, trayecto):
         '''

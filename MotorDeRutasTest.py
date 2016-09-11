@@ -51,6 +51,12 @@ class MotorDeRutasTest(unittest.TestCase):
 
             self.assertTrue(len(trayectoInicial.rutas) == 3)
 
+    def test_obtiene_trayectos_por_nombre(self):
+        with vcr.use_cassette('fixtures/bs_as_la_plata.yaml'):
+            trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
+
+            self.assertEqual(trayecto, self.motor.obtener_trayecto(trayecto.nombre))
+
     '''
     def test_muestra_trayectos(self):
         self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')

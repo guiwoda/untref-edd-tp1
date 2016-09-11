@@ -159,10 +159,7 @@ class MotorDeRutas:
         :param trayecto:
         :return:
         '''
-        if not trayecto in self.trayectos:
-            raise KeyError("El trayecto %s no existe" % trayecto)
-
-        return str(self.trayectos[trayecto])
+        return str(self.obtener_trayecto(trayecto))
 
     def mostrar_rutas(self, trayecto):
         '''
@@ -217,6 +214,16 @@ class MotorDeRutas:
         distancia, tiempo = calcular_distancia_tiempo(data)
         ruta = Ruta(self.trayectos[trayecto].origen, destino, distancia, tiempo)
         return ruta'''
+    def obtener_trayecto(self, nombre):
+        '''
+        Obtiene un trayecto por nombre, o emite un error si no existe.
+        :param nombre: str
+        :return: Trayecto
+        '''
+        if not nombre in self.trayectos:
+            raise KeyError("El trayecto [%s] no existe" % nombre)
+
+        return self.trayectos[nombre]
 
 
 if __name__ == '__main__':

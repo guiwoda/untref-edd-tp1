@@ -1,4 +1,5 @@
 import unittest
+import vcr
 
 from MotorDeRutas import MotorDeRutas
 from RutaException import RutaException
@@ -12,37 +13,43 @@ class MotorDeRutasTest(unittest.TestCase):
         self.motor = MotorDeRutas()
 
     def test_crea_trayectos_nuevos(self):
-        trayecto = self.motor.crear_trayecto('Ushuaia, Argentina', 'La Quiaca, Argentina', 'De Ushuaia a La Quiaca')
+        with vcr.use_cassette('fixtures/ushuaia_la_quiaca.yaml'):
+            trayecto = self.motor.crear_trayecto('Ushuaia, Argentina', 'La Quiaca, Argentina', 'De Ushuaia a La Quiaca')
 
-        self.assertIsInstance(trayecto, Trayecto)
+            self.assertIsInstance(trayecto, Trayecto)
 
     def test_falla_cuando_el_trayecto_no_existe(self):
-        with self.assertRaises(RutaException):
-            self.motor.crear_trayecto('Buenos Aires, Argentina', 'Reykjavik, Islandia', 'islandia')
+        with vcr.use_cassette('fixtures/bs_as_reykjavik.yaml'):
+            with self.assertRaises(RutaException):
+                self.motor.crear_trayecto('Buenos Aires, Argentina', 'Reykjavik, Islandia', 'islandia')
 
     def test_agrega_ciudad_a_trayecto(self):
-        trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
-        self.motor.agregar_ciudad(trayecto.nombre, 'Quilmes')
+        with vcr.use_cassette('fixtures/bs_as_la_plata.yaml'):
+            trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
+            self.motor.agregar_ciudad(trayecto.nombre, 'Quilmes')
 
-        self.assertTrue(trayecto.nombre in self.motor.trayectos)
+            self.assertTrue(trayecto.nombre in self.motor.trayectos)
 
     def test_falla_cuando_la_ciudad_no_existe_en_trayecto(self):
-        trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
+        with vcr.use_cassette('fixtures/bs_as_la_plata.yaml'):
+            trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
 
-        with self.assertRaises(TrayectoException):
-            self.motor.agregar_parada(trayecto.nombre, 'Tandil', 'Quilmes')
+            with self.assertRaises(TrayectoException):
+                self.motor.agregar_parada(trayecto.nombre, 'Tandil', 'Quilmes')
 
     def test_agrega_parada_a_trayecto(self):
-        trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
-        self.motor.agregar_ciudad(trayecto.nombre, 'Tandil')
-        self.motor.agregar_parada(trayecto.nombre, 'La Plata', 'Quilmes')
+        with vcr.use_cassette('fixtures/bs_as_la_plata_quilmes.yaml'):
+            trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
+            self.motor.agregar_ciudad(trayecto.nombre, 'Tandil')
+            self.motor.agregar_parada(trayecto.nombre, 'La Plata', 'Quilmes')
 
     def test_concatena_trayectos(self):
-        trayectoInicial = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'trayecto_inicial')
-        trayectoFinal = self.motor.crear_trayecto('Quilmes', 'Tandil', 'trayecto_final')
-        self.motor.concatenar(trayectoInicial.nombre, trayectoFinal.nombre)
+        with vcr.use_cassette('fixtures/bs_as_la_plata_quilmes_tandil.yaml'):
+            trayectoInicial = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'trayecto_inicial')
+            trayectoFinal = self.motor.crear_trayecto('Quilmes', 'Tandil', 'trayecto_final')
+            self.motor.concatenar(trayectoInicial.nombre, trayectoFinal.nombre)
 
-        self.assertTrue(len(trayectoInicial.rutas) == 3)
+            self.assertTrue(len(trayectoInicial.rutas) == 3)
 
     '''
     def test_muestra_trayectos(self):

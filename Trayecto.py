@@ -32,7 +32,7 @@ class Trayecto:
             return False
         '''
 
-    def devuelve_ruta_de_destinoIntermedio(self, ciudad):
+    def obtener_ruta_con_destino_en(self, ciudad):
         '''
         Verifica si existe la ciudad en este trayecto.
         :param ciudad: string
@@ -42,14 +42,8 @@ class Trayecto:
             if ruta.destino == ciudad:
                 return ruta
 
-
-    def consultar_posicion_ciudad(self, ciudad):
-        for ruta in self.rutas:
-            if ruta.origen == ciudad or ruta.destino == ciudad:
-                return self.rutas.index(ruta)
-        ''''''
-        #Solo estoy modificando la Ruta que corresponde al destinoIntermedio como Destino y no como origen
-        #return [self.rutas.index(ruta) for ruta in self.rutas if ruta.destino == ciudad]
+    def obtener_ciudades(self):
+        return [ruta.origen for ruta in self.rutas] + [self.rutas[-1].destino]
 
     def __str__(self):
         salida = self.nombre + ': '

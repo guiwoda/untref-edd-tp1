@@ -2,6 +2,7 @@ import unittest
 import vcr
 
 from MotorDeRutas import MotorDeRutas
+from Ruta import Ruta
 from RutaException import RutaException
 from TrayectoException import TrayectoException
 from Trayecto import Trayecto
@@ -43,6 +44,7 @@ class MotorDeRutasTest(unittest.TestCase):
             self.motor.agregar_ciudad(trayecto.nombre, 'Tandil')
             self.motor.agregar_parada(trayecto.nombre, 'La Plata', 'Quilmes')
 
+            self.assertEqual(['Buenos Aires', 'Quilmes', 'La Plata', 'Tandil'], trayecto.obtener_ciudades())
     def test_concatena_trayectos(self):
         with vcr.use_cassette('fixtures/bs_as_la_plata_quilmes_tandil.yaml'):
             trayectoInicial = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'trayecto_inicial')
@@ -56,6 +58,16 @@ class MotorDeRutasTest(unittest.TestCase):
             trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
 
             self.assertEqual(trayecto, self.motor.obtener_trayecto(trayecto.nombre))
+
+    def test_obtiene_rutas_entre_dos_ciudades(self):
+        with vcr.use_cassette('fixtures/bs_as_la_plata.yaml'):
+            ruta = self.motor.obtener_ruta('Buenos Aires', 'La Plata')
+
+            self.assertIsInstance(ruta, Ruta)
+    def test_falla_al_obtener_rutas_entre_dos_ciudades_desconectadas(self):
+        with vcr.use_cassette('fixtures/bs_as_reykjavik.yaml'):
+            with self.assertRaises(RutaException):
+                self.motor.obtener_ruta('Buenos Aires, Argentina', 'Reykjavik, Islandia')
 
     '''
     def test_muestra_trayectos(self):

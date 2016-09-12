@@ -17,5 +17,9 @@ class TrayectoTest(unittest.TestCase):
         self.assertTrue(self.trayecto.ciudad_existe('La Plata'))
         self.assertFalse(self.trayecto.ciudad_existe('Cordoba'))
 
+    def test_lista_las_ciudades_ordenadas(self):
+        self.assertEqual(['Buenos Aires', 'La Plata', 'Bahia Blanca'], self.trayecto.obtener_ciudades())
+
+
 if __name__ == '__main__':
     unittest.main()

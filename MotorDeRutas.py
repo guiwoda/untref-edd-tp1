@@ -119,6 +119,13 @@ class MotorDeRutas:
         :type tipo: str
         :rtype: int
         """
+        if tipo == 'd':
+            return self.comparar_distancias(trayecto, otroTrayecto)
+
+        if tipo == 't':
+            return self.comparar_tiempo(trayecto, otroTrayecto)
+
+        raise IndexError("Tipo de comparación invalida. Usar 'd' para distancias o 't' para tiempo.")
 
     def mostrar(self, trayecto):
         """Mostrar un trayecto.
@@ -202,3 +209,33 @@ class MotorDeRutas:
             raise KeyError("El trayecto [%s] no existe" % nombre)
 
         return self.trayectos[nombre]
+
+    def comparar_distancias(self, trayecto, otroTrayecto):
+        """Compara la distancia entre dos trayectos.
+
+        Devuelve -1 si el primero es más corto que el segundo, 1 si es más largo y 0 si son iguales.
+
+        :type trayecto: str
+        :type otroTrayecto: str
+        :rtype: int
+        """
+
+        trayecto = self.obtener_trayecto(trayecto)
+        otroTrayecto = self.obtener_trayecto(otroTrayecto)
+
+        return (trayecto.distaciaTotal > otroTrayecto.distaciaTotal) - (trayecto.distaciaTotal < otroTrayecto.distaciaTotal)
+
+    def comparar_tiempo(self, trayecto, otroTrayecto):
+        """Compara el tiempo entre dos trayectos.
+
+        Devuelve -1 si el primero es más rápido que el segundo, 1 si es más lento y 0 si son iguales.
+
+        :type trayecto: str
+        :type otroTrayecto: str
+        :rtype: int
+        """
+
+        trayecto = self.obtener_trayecto(trayecto)
+        otroTrayecto = self.obtener_trayecto(otroTrayecto)
+
+        return (trayecto.tiempoTotal > otroTrayecto.tiempoTotal) - (trayecto.tiempoTotal < otroTrayecto.tiempoTotal)

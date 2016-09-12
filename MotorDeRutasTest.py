@@ -132,6 +132,31 @@ La Plata - La Quiaca
             self.motor.crear_trayecto('Quilmes', 'Tandil', 'tray_b')
 
             self.assertEqual({'tray_a', 'tray_b'}, set(self.motor.listar()))
-    
+
+    def test_persiste_los_trayectos(self):
+        with vcr.use_cassette('fixtures/bs_as_la_plata_quilmes_tandil.yaml'):
+            self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'tray_a')
+            self.motor.crear_trayecto('Quilmes', 'Tandil', 'tray_b')
+
+            self.motor.guardar()
+
+            self.motor = MotorDeRutas()
+            self.motor.recuperar()
+
+            self.assertEqual({'tray_a', 'tray_b'}, set(self.motor.listar()))
+
+    def test_sabe_si_hay_cambios_sin_guardar(self):
+        with vcr.use_cassette('fixtures/bs_as_la_plata_quilmes_tandil.yaml'):
+            self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'algo_nuevo')
+
+            self.assertFalse(self.motor.esta_guardado())
+
+    def test_sabe_si_hay_cambios_guardados(self):
+        with vcr.use_cassette('fixtures/bs_as_la_plata_quilmes_tandil.yaml'):
+            self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'tray_a')
+            self.motor.guardar('tray_a')
+
+            self.assertTrue(self.motor.esta_guardado())
+
 if __name__ == '__main__':
     unittest.main()

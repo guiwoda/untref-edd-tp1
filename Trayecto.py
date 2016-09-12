@@ -77,3 +77,6 @@ class Trayecto:
         for ruta in self.rutas:
             self.tiempoTotal += ruta.tiempo
             self.distaciaTotal += ruta.distancia
+
+    def __eq__(self, other):
+        return self.nombre == other.nombre and self.rutas == other.rutas

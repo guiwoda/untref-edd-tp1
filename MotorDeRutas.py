@@ -1,3 +1,8 @@
+import pickle
+from os import listdir
+
+from os.path import isfile
+
 from RutaException import RutaException
 from TrayectoException import TrayectoException
 from config import *
@@ -189,18 +194,52 @@ class MotorDeRutas:
 
         :type trayecto: str
         """
+        for nombre in self.trayectos:
+            if not trayecto or trayecto == nombre:
+                with open('trayectos/%s.p' % nombre, 'wb') as file:
+                    pickle.dump(self.trayectos[nombre], file)
 
     def recuperar(self):
         """Recuperar de disco los trayectos almacenados.
 
         Debe recuperar todos los trayectos almacenados en disco.
         """
+        self.trayectos = self.cargar_de_disco()
+
+    def cargar_de_disco(self):
+        """Carga de disco los trayectos y los devuelve.
+
+        :rtype: dict
+        """
+        data = {}
+        dir = 'trayectos'
+        for archivo in listdir(dir):
+            path = '%s/%s' % (dir, archivo)
+
+            if isfile(path) and archivo[-2:] == '.p':
+                with open(path, 'rb') as persistido:
+                    data[archivo[:-2]] = pickle.load(persistido)
+
+        return data
 
     def esta_guardado(self):
         """Verifica si todos los trayectos están persistidos en disco.
 
         :rtype: bool
         """
+        if not self.trayectos:
+            return True
+
+        guardados = self.cargar_de_disco()
+
+        for trayecto in self.trayectos:
+            if trayecto not in guardados:
+                return False
+
+            if self.trayectos[trayecto] != guardados[trayecto]:
+                return False
+
+        return True
 
     def obtener_trayecto(self, nombre):
         """Obtiene un trayecto por nombre, o emite un error si no existe.

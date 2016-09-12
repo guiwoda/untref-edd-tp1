@@ -26,3 +26,6 @@ class Ruta:
             return '%s hs' % round(self.tiempo / 3600, 1)
 
         return '%s mins' % round(self.tiempo / 60, 1)
+
+    def __eq__(self, other):
+        return self.origen == other.origen and self.destino == other.destino

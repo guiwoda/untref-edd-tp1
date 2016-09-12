@@ -34,9 +34,19 @@ def agregar_ciudad():
 
     return "Ciudad [%s] agregada a [%s]" % (ciudad, trayecto)
 
+def agregar_parada():
+    trayecto = input('Ingrese nombre del trayecto: ')
+    existente = input('Ciudad existente del trayecto? ')
+    parada = input('Ciudad a agregar? ')
+
+    motor.agregar_parada(trayecto, existente, parada)
+
+    return "Ciudad [%s] agregada antes de [%s] a [%s]" % (parada, existente, trayecto)
+
 # Create the menu
 menu.append_item(FnItem("Crear trayecto", crear_trayecto))
 menu.append_item(FnItem("Agregar ciudad", agregar_ciudad))
+menu.append_item(FnItem("Agregar ciudad intermedia", agregar_parada))
 
 '''
 # Create some items

@@ -27,9 +27,14 @@ class MotorDeRutasTest(unittest.TestCase):
     def test_agrega_ciudad_a_trayecto(self):
         with vcr.use_cassette('fixtures/bs_as_la_plata.yaml'):
             trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
+            distancia = trayecto.distaciaTotal
+            tiempo = trayecto.tiempoTotal
+
             self.motor.agregar_ciudad(trayecto.nombre, 'Quilmes')
 
-            self.assertTrue(trayecto.nombre in self.motor.trayectos)
+            self.assertEqual('Quilmes', trayecto.ultima_ciudad())
+            self.assertGreater(trayecto.distaciaTotal, distancia)
+            self.assertGreater(trayecto.tiempoTotal, tiempo)
 
     def test_falla_cuando_la_ciudad_no_existe_en_trayecto(self):
         with vcr.use_cassette('fixtures/bs_as_la_plata.yaml'):
@@ -42,9 +47,15 @@ class MotorDeRutasTest(unittest.TestCase):
         with vcr.use_cassette('fixtures/bs_as_la_plata_quilmes.yaml'):
             trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
             self.motor.agregar_ciudad(trayecto.nombre, 'Tandil')
+
+            distancia = trayecto.distaciaTotal
+            tiempo = trayecto.tiempoTotal
+
             self.motor.agregar_parada(trayecto.nombre, 'La Plata', 'Quilmes')
 
             self.assertEqual(['Buenos Aires', 'Quilmes', 'La Plata', 'Tandil'], trayecto.obtener_ciudades())
+            self.assertGreater(trayecto.distaciaTotal, distancia)
+            self.assertGreater(trayecto.tiempoTotal, tiempo)
     def test_concatena_trayectos(self):
         with vcr.use_cassette('fixtures/bs_as_la_plata_quilmes_tandil.yaml'):
             trayectoInicial = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'trayecto_inicial')
@@ -96,6 +107,7 @@ tiempo estimado de viaje: 3366''',
             self.assertEqual(0,  self.motor.comparar(buenos_aires_la_plata.nombre, buenos_aires_la_plata.nombre, 't'))
             self.assertEqual(-1, self.motor.comparar(buenos_aires_la_plata.nombre, quilmes_tandil.nombre, 't'))
             self.assertEqual(1,  self.motor.comparar(quilmes_tandil.nombre,        buenos_aires_la_plata.nombre, 't'))
+
 
 if __name__ == '__main__':
     unittest.main()

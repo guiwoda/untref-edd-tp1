@@ -45,7 +45,9 @@ class MotorDeRutas:
         if data['rows'][0]['elements'][0]['status'] != 'OK':
             raise RutaException.ciudades_desconectadas(origen, destino)
 
-        distancia, tiempo = self.calcular_distancia_tiempo(data)
+        distancia = data['rows'][0]['elements'][0]['distance']['value']
+        tiempo = data['rows'][0]['elements'][0]['duration']['value']
+
         return Ruta(origen, destino, distancia, tiempo)
 
     def agregar_ciudad(self, trayecto, ciudad):
@@ -60,7 +62,7 @@ class MotorDeRutas:
         trayecto = self.obtener_trayecto(trayecto)
         ruta = self.obtener_ruta(trayecto.ultima_ciudad(), ciudad)
 
-        trayecto.rutas.append(ruta)
+        trayecto.agregar_ruta(ruta)
 
     def agregar_parada(self, trayecto, existente, parada):
         """Agregar una ciudad intermedia a un trayecto.
@@ -87,6 +89,8 @@ class MotorDeRutas:
         posicion = trayecto.rutas.index(rutaActual)
 
         trayecto.rutas = trayecto.rutas[:posicion] + [rutaHaciaParada, rutaHaciaExistente] + trayecto.rutas[posicion + 1:]
+        trayecto.actualizar_totales()
+
         return trayecto
 
     def concatenar(self, inicial, final):
@@ -105,6 +109,7 @@ class MotorDeRutas:
         conexion = self.obtener_ruta(trayectoInicial.ultima_ciudad(), trayectoFinal.primera_ciudad())
 
         trayectoInicial.rutas = trayectoInicial.rutas + [conexion] + trayectoFinal.rutas
+        trayectoInicial.actualizar_totales()
 
         return trayectoInicial
 
@@ -188,16 +193,6 @@ class MotorDeRutas:
 
         :rtype: bool
         """
-
-    def calcular_distancia_tiempo(self, data):
-        """Calcula distancia y tiempo en base a un mensaje de la `distance_matrix` de Google Maps.
-
-        :type data: dict
-        :rtype: tuple
-        """
-        distancia = data['rows'][0]['elements'][0]['distance']['value']
-        tiempo = data['rows'][0]['elements'][0]['duration']['value']
-        return distancia, tiempo
 
     def obtener_trayecto(self, nombre):
         """Obtiene un trayecto por nombre, o emite un error si no existe.

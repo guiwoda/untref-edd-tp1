@@ -1,5 +1,4 @@
-import functools
-
+from Ruta import Ruta
 
 class Trayecto:
 
@@ -60,3 +59,21 @@ class Trayecto:
 
     def primera_ciudad(self):
         return self.rutas[0].origen
+
+    def agregar_ruta(self, ruta):
+        """Agrega una ruta al trayecto.
+
+        :type ruta: Ruta
+        """
+        self.rutas.append(ruta)
+
+        self.actualizar_totales()
+
+    def actualizar_totales(self):
+        """Actualiza los totales de distancia y tiempo."""
+        self.tiempoTotal = 0
+        self.distaciaTotal = 0
+
+        for ruta in self.rutas:
+            self.tiempoTotal += ruta.tiempo
+            self.distaciaTotal += ruta.distancia

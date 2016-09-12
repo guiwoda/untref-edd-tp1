@@ -51,7 +51,7 @@ class MotorDeRutasTest(unittest.TestCase):
             trayectoFinal = self.motor.crear_trayecto('Quilmes', 'Tandil', 'trayecto_final')
             self.motor.concatenar(trayectoInicial.nombre, trayectoFinal.nombre)
 
-            self.assertTrue(len(trayectoInicial.rutas) == 3)
+            self.assertEqual(['Buenos Aires', 'La Plata', 'Quilmes', 'Tandil'], trayectoInicial.obtener_ciudades())
 
     def test_obtiene_trayectos_por_nombre(self):
         with vcr.use_cassette('fixtures/bs_as_la_plata.yaml'):

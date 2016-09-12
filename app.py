@@ -1,8 +1,9 @@
-# Import the necessary packages
 from time import sleep
 
 from cursesmenu import *
 from cursesmenu.items import *
+
+from MessageException import MessageException
 from MotorDeRutas import MotorDeRutas
 
 motor = MotorDeRutas()
@@ -13,8 +14,13 @@ def FnItem(title, func):
 
 def do_wait(func, wait=3):
     def do():
-        print(func())
-        sleep(wait)
+        try:
+            print(func())
+            sleep(wait)
+        except MessageException as e:
+            print(e.message)
+            sleep(wait)
+            do()
     return do
 
 def crear_trayecto():

@@ -1,4 +1,7 @@
-class TrayectoException(BaseException):
+from MessageException import MessageException
+
+
+class TrayectoException(MessageException):
 
     @staticmethod
     def ciudad_inexistente_en_trayecto(destinoIntermedio, trayecto):

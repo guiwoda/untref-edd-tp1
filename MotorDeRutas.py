@@ -164,6 +164,13 @@ class MotorDeRutas:
         :type trayecto: str
         :rtype: str
         """
+        trayecto = self.obtener_trayecto(trayecto)
+
+        salida = ''
+        for ruta in trayecto.rutas:
+            salida += str(ruta) + '\n'
+
+        return salida
 
     def listar(self):
         """Listar los trayectos calculados.

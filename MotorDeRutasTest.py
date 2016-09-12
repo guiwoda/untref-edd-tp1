@@ -108,6 +108,22 @@ tiempo estimado de viaje: 3366''',
             self.assertEqual(-1, self.motor.comparar(buenos_aires_la_plata.nombre, quilmes_tandil.nombre, 't'))
             self.assertEqual(1,  self.motor.comparar(quilmes_tandil.nombre,        buenos_aires_la_plata.nombre, 't'))
 
+    def test_muestra_rutas_de_un_trayecto(self):
+        with vcr.use_cassette('fixtures/bs_as_la_plata_la_quiaca.yaml'):
+            trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
+            self.motor.agregar_ciudad(trayecto.nombre, 'La Quiaca')
 
+            self.assertEqual(
+                '''Buenos Aires - La Plata
+58.2 km
+56.1 mins
+
+La Plata - La Quiaca
+1831.0 km
+21.0 hs
+
+''',
+                 self.motor.mostrar_rutas(trayecto.nombre)
+            )
 if __name__ == '__main__':
     unittest.main()

@@ -125,5 +125,13 @@ La Plata - La Quiaca
 ''',
                  self.motor.mostrar_rutas(trayecto.nombre)
             )
+
+    def test_muestra_trayectos_disponibles(self):
+        with vcr.use_cassette('fixtures/bs_as_la_plata_quilmes_tandil.yaml'):
+            self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'tray_a')
+            self.motor.crear_trayecto('Quilmes', 'Tandil', 'tray_b')
+
+            self.assertEqual({'tray_a', 'tray_b'}, set(self.motor.listar()))
+    
 if __name__ == '__main__':
     unittest.main()

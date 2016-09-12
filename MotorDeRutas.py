@@ -179,6 +179,7 @@ class MotorDeRutas:
 
         :rtype: list
         """
+        return [trayecto for trayecto in self.trayectos]
 
     def guardar(self, trayecto = ''):
         """Almacenar en disco los trayectos calculados.

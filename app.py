@@ -12,8 +12,10 @@ def FnItem(title, func):
     return FunctionItem(title, do_wait(func))
 
 def do_wait(func, wait=3):
-    print(func())
-    sleep(wait)
+    def do():
+        print(func())
+        sleep(wait)
+    return do
 
 def crear_trayecto():
     nombre = input('Ingrese nombre del trayecto: ')
@@ -24,8 +26,17 @@ def crear_trayecto():
 
     return "Trayecto [%s] creado." % nombre
 
+def agregar_ciudad():
+    trayecto = input('Ingrese nombre del trayecto: ')
+    ciudad = input('Ciudad a agregar? ')
+
+    motor.agregar_ciudad(trayecto, ciudad)
+
+    return "Ciudad [%s] agregada a [%s]" % (ciudad, trayecto)
+
 # Create the menu
 menu.append_item(FnItem("Crear trayecto", crear_trayecto))
+menu.append_item(FnItem("Agregar ciudad", agregar_ciudad))
 
 '''
 # Create some items

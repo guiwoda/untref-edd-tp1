@@ -43,10 +43,19 @@ def agregar_parada():
 
     return "Ciudad [%s] agregada antes de [%s] a [%s]" % (parada, existente, trayecto)
 
+def concatenar():
+    inicial = input('Ingrese trayecto inicial: ')
+    final = input('Ingrese trayecto final: ')
+
+    motor.concatenar(inicial, final)
+
+    return "Trayectos [%s] concatenado al final de [%s]." % (final, inicial)
+
 # Create the menu
 menu.append_item(FnItem("Crear trayecto", crear_trayecto))
 menu.append_item(FnItem("Agregar ciudad", agregar_ciudad))
 menu.append_item(FnItem("Agregar ciudad intermedia", agregar_parada))
+menu.append_item(FnItem("Concatenar trayectos", concatenar))
 
 '''
 # Create some items

@@ -58,3 +58,5 @@ class Trayecto:
 
         return salida
 
+    def primera_ciudad(self):
+        return self.rutas[0].origen

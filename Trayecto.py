@@ -1,3 +1,4 @@
+from ConversorUnidades import ConversorUnidades
 from Ruta import Ruta
 
 class Trayecto:
@@ -52,8 +53,8 @@ class Trayecto:
 
         salida += self.ultima_ciudad() + '\n'
 
-        salida += 'distancia: ' + str(self.distaciaTotal) + '\n'
-        salida += 'tiempo estimado de viaje: ' + str(self.tiempoTotal)
+        salida += 'distancia: ' + ConversorUnidades.distancia_legible(self.distaciaTotal) + '\n'
+        salida += 'tiempo estimado de viaje: ' + ConversorUnidades.tiempo_legible(self.tiempoTotal)
 
         return salida
 

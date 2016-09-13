@@ -86,8 +86,8 @@ class MotorDeRutasTest(unittest.TestCase):
 
             self.assertEqual(
 '''bs_as_la_plata: Buenos Aires, La Plata
-distancia: 58158
-tiempo estimado de viaje: 3366''',
+distancia: 58.2 km
+tiempo estimado de viaje: 56.1 mins''',
                 self.motor.mostrar('bs_as_la_plata'))
 
     def test_compara_trayectos_por_distancia(self):

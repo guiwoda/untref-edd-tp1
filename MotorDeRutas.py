@@ -5,6 +5,7 @@ from os.path import isfile
 
 from RutaException import RutaException
 from TrayectoException import TrayectoException
+from MotorDeRutasException import MotorDeRutasException
 from config import *
 import googlemaps
 from Ruta import Ruta
@@ -29,6 +30,9 @@ class MotorDeRutas:
         :type nombre: str
         :rtype: Trayecto
         """
+        if nombre in self.trayectos:
+            raise MotorDeRutasException.nombre_de_trayecto_duplicado(self.trayectos[nombre])
+
         ruta = self.obtener_ruta(origen, destino)
 
         self.trayectos[nombre] = Trayecto(nombre, ruta)

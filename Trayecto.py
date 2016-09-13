@@ -40,6 +40,9 @@ class Trayecto:
         for ruta in self.rutas:
             if ruta.destino == ciudad:
                 return ruta
+            else:
+                #este caso sólo se da con existente como origen
+                return self.rutas[0]
 
     def obtener_ciudades(self):
         return [ruta.origen for ruta in self.rutas] + [self.rutas[-1].destino]
@@ -51,9 +54,15 @@ class Trayecto:
             salida += ruta.origen + ', '
 
         salida += self.ultima_ciudad() + '\n'
+        #Formato dístancia y tiempo
+        dias = int(self.tiempoTotal / 24 / 60 / 60)
+        self.tiempoTotal = self.tiempoTotal - dias * 24 * 60 * 60
+        horas = int(self.tiempoTotal / 60 / 60)
+        self.tiempoTotal = self.tiempoTotal - horas * 60 * 60
+        minutos = int(self.tiempoTotal / 60)
 
-        salida += 'distancia: ' + str(self.distaciaTotal) + '\n'
-        salida += 'tiempo estimado de viaje: ' + str(self.tiempoTotal)
+        salida += 'distancia: {0:8.4f} km'.format(self.distaciaTotal/1000000) + '\n'
+        salida += 'tiempo estimado de viaje: {0:2d} dias, {1:2d} horas, {2:2d} min'.format(dias, horas, minutos) + '\n'
 
         return salida
 

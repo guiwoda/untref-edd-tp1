@@ -33,6 +33,9 @@ def crear_trayecto():
     return "Trayecto [%s] creado." % nombre
 
 def agregar_ciudad():
+    if not motor.trayectos:
+        return "No hay trayectos disponibles."
+
     trayecto = input('Ingrese nombre del trayecto: ')
     ciudad = input('Ciudad a agregar? ')
 
@@ -41,6 +44,9 @@ def agregar_ciudad():
     return "Ciudad [%s] agregada a [%s]" % (ciudad, trayecto)
 
 def agregar_parada():
+    if not motor.trayectos:
+        return "No hay trayectos disponibles."
+
     trayecto = input('Ingrese nombre del trayecto: ')
     existente = input('Ciudad existente del trayecto? ')
     parada = input('Ciudad a agregar? ')
@@ -50,6 +56,9 @@ def agregar_parada():
     return "Ciudad [%s] agregada antes de [%s] a [%s]" % (parada, existente, trayecto)
 
 def concatenar():
+    if len(motor.trayectos) < 2:
+        return "No hay suficientes trayectos disponibles."
+
     inicial = input('Ingrese trayecto inicial: ')
     final = input('Ingrese trayecto final: ')
 

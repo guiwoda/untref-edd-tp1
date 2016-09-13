@@ -248,7 +248,7 @@ class MotorDeRutas:
         :rtype: Trayecto
         """
         if not nombre in self.trayectos:
-            raise KeyError("El trayecto [%s] no existe" % nombre)
+            raise TrayectoException("El trayecto [%s] no existe" % nombre)
 
         return self.trayectos[nombre]
 

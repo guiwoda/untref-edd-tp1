@@ -9,16 +9,6 @@ from MotorDeRutas import MotorDeRutas
 motor = MotorDeRutas()
 menu = CursesMenu("Estructura de datos - TP 1 | Guido Contreras Woda - Teresa Alberto", "Opciones:")
 
-def mensaje_salida():
-    if motor.esta_guardado():
-        print("Adios")
-    else:
-        print("No se puede salir sin guardar.")
-
-    sleep(3)
-
-salida = FunctionItem("Salir", mensaje_salida, should_exit=True)
-
 def FnItem(title, func):
     return FunctionItem(title, do_wait(func))
 
@@ -27,7 +17,6 @@ def do_wait(func, wait=3):
         try:
             print(func())
             sleep(wait)
-            salida.should_exit = motor.esta_guardado()
         except MessageException as e:
             print(e.message)
             sleep(wait)
@@ -124,6 +113,11 @@ def cargar():
 
     return "Trayectos cargados: %s" % motor.trayectos
 
+def salir():
+    if not motor.esta_guardado():
+        motor.guardar()
+    return "Adios"
+
 # Create the menu
 menu.append_item(FnItem("Crear trayecto", crear_trayecto))
 menu.append_item(FnItem("Agregar ciudad", agregar_ciudad))
@@ -135,32 +129,7 @@ menu.append_item(FnItem("Mostrar rutas", mostrar_rutas))
 menu.append_item(FnItem("Listar", listar))
 menu.append_item(FnItem("Guardar", guardar))
 menu.append_item(FnItem("Cargar de disco", cargar))
-menu.append_item(salida)
+menu.append_item(FnItem("Salir", salir))
 menu.show_exit_option = False
-'''
-# Create some items
-
-# MenuItem is the base class for all items, it doesn't do anything when selected
-menu_item = MenuItem("Menu Item")
-
-# A FunctionItem runs a Python function when selected
-function_item = FunctionItem("Call a Python function", input, ["Enter an input"])
-
-# A CommandItem runs a console command
-command_item = CommandItem("Run a console command",  "touch hello.txt")
-
-# A SelectionMenu constructs a menu from a list of strings
-selection_menu = SelectionMenu(["item1", "item2", "item3"])
-
-# A SubmenuItem lets you add a menu (the selection_menu above, for example)
-# as a submenu of another menu
-submenu_item = SubmenuItem("Submenu item", selection_menu, menu)
-
-# Once we're done creating them, we just add the items to the menu
-menu.append_item(menu_item)
-menu.append_item(function_item)
-menu.append_item(command_item)
-menu.append_item(submenu_item)
-'''
 
 menu.show()

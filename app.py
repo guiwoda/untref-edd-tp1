@@ -66,11 +66,29 @@ def concatenar():
 
     return "Trayectos [%s] concatenado al final de [%s]." % (final, inicial)
 
+def comparar():
+    if len(motor.trayectos) < 2:
+        return "No hay suficientes trayectos disponibles."
+
+    a = input('Ingrese trayecto: ')
+    b = input('Ingrese trayecto a comparar: ')
+    options = ['distancia', 'tiempo']
+    tipo = options[SelectionMenu.get_selection(options, 'Como comparo?', exit_option=False)]
+
+    mensajes = {
+        -1: '%s es menor que %s',
+        0:  '%s y %s son iguales',
+        1:  '%s es mayor que %s',
+    }
+
+    return mensajes[motor.comparar(a, b, tipo[0])] % (a, b)
+
 # Create the menu
 menu.append_item(FnItem("Crear trayecto", crear_trayecto))
 menu.append_item(FnItem("Agregar ciudad", agregar_ciudad))
 menu.append_item(FnItem("Agregar ciudad intermedia", agregar_parada))
 menu.append_item(FnItem("Concatenar trayectos", concatenar))
+menu.append_item(FnItem("Comparar trayectos", comparar))
 
 '''
 # Create some items

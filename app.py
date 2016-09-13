@@ -9,6 +9,16 @@ from MotorDeRutas import MotorDeRutas
 motor = MotorDeRutas()
 menu = CursesMenu("Estructura de datos - TP 1 | Guido Contreras Woda - Teresa Alberto", "Opciones:")
 
+def mensaje_salida():
+    if motor.esta_guardado():
+        print("Adios")
+    else:
+        print("No se puede salir sin guardar.")
+
+    sleep(3)
+
+salida = FunctionItem("Salir", mensaje_salida, should_exit=True)
+
 def FnItem(title, func):
     return FunctionItem(title, do_wait(func))
 
@@ -17,6 +27,7 @@ def do_wait(func, wait=3):
         try:
             print(func())
             sleep(wait)
+            salida.should_exit = motor.esta_guardado()
         except MessageException as e:
             print(e.message)
             sleep(wait)
@@ -102,6 +113,17 @@ def mostrar_rutas():
 def listar():
     return str(motor.listar()) if motor.trayectos else "No hay trayectos."
 
+def guardar():
+    trayecto = input('Trayecto a guardar? (Enter para guardar todo) ')
+    motor.guardar(trayecto)
+
+    return "Trayecto%s guardado%s" % ((" ["+trayecto+"]", "") if trayecto else ("s","s"))
+
+def cargar():
+    motor.cargar_de_disco()
+
+    return "Trayectos cargados: %s" % motor.trayectos
+
 # Create the menu
 menu.append_item(FnItem("Crear trayecto", crear_trayecto))
 menu.append_item(FnItem("Agregar ciudad", agregar_ciudad))
@@ -111,7 +133,10 @@ menu.append_item(FnItem("Comparar trayectos", comparar))
 menu.append_item(FnItem("Mostrar trayecto", mostrar))
 menu.append_item(FnItem("Mostrar rutas", mostrar_rutas))
 menu.append_item(FnItem("Listar", listar))
-
+menu.append_item(FnItem("Guardar", guardar))
+menu.append_item(FnItem("Cargar de disco", cargar))
+menu.append_item(salida)
+menu.show_exit_option = False
 '''
 # Create some items
 

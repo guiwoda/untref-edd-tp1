@@ -83,12 +83,30 @@ def comparar():
 
     return mensajes[motor.comparar(a, b, tipo[0])] % (a, b)
 
+def mostrar():
+    if not motor.trayectos:
+        return "No hay trayectos disponibles."
+
+    trayecto = input('Ingrese trayecto: ')
+
+    return motor.mostrar(trayecto)
+
+def mostrar_rutas():
+    if not motor.trayectos:
+        return "No hay trayectos disponibles."
+
+    trayecto = input('Ingrese trayecto: ')
+
+    return motor.mostrar_rutas(trayecto)
+
 # Create the menu
 menu.append_item(FnItem("Crear trayecto", crear_trayecto))
 menu.append_item(FnItem("Agregar ciudad", agregar_ciudad))
 menu.append_item(FnItem("Agregar ciudad intermedia", agregar_parada))
 menu.append_item(FnItem("Concatenar trayectos", concatenar))
 menu.append_item(FnItem("Comparar trayectos", comparar))
+menu.append_item(FnItem("Mostrar trayecto", mostrar))
+menu.append_item(FnItem("Mostrar rutas", mostrar_rutas))
 
 '''
 # Create some items

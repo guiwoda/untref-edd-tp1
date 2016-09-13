@@ -99,6 +99,9 @@ def mostrar_rutas():
 
     return motor.mostrar_rutas(trayecto)
 
+def listar():
+    return str(motor.listar()) if motor.trayectos else "No hay trayectos."
+
 # Create the menu
 menu.append_item(FnItem("Crear trayecto", crear_trayecto))
 menu.append_item(FnItem("Agregar ciudad", agregar_ciudad))
@@ -107,6 +110,7 @@ menu.append_item(FnItem("Concatenar trayectos", concatenar))
 menu.append_item(FnItem("Comparar trayectos", comparar))
 menu.append_item(FnItem("Mostrar trayecto", mostrar))
 menu.append_item(FnItem("Mostrar rutas", mostrar_rutas))
+menu.append_item(FnItem("Listar", listar))
 
 '''
 # Create some items

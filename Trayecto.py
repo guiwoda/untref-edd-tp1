@@ -24,14 +24,6 @@ class Trayecto:
         '''
         return [ruta for ruta in self.rutas if ruta.origen == ciudad or ruta.destino == ciudad]
 
-        '''def ciudad_existe_en_trayecto(self, ciudad):
-        for ruta in self.rutas:
-            if ruta.origen == ciudad or ruta.destino == ciudad:
-                return True
-        else:
-            return False
-        '''
-
     def obtener_ruta_con_destino_en(self, ciudad):
         '''
         Verifica si existe la ciudad en este trayecto.

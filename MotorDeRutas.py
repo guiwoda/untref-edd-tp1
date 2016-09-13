@@ -29,6 +29,9 @@ class MotorDeRutas:
         :type nombre: str
         :rtype: Trayecto
         """
+        if nombre in self.trayectos:
+            raise TrayectoException("El trayecto [%s] ya existe." % nombre)
+
         ruta = self.obtener_ruta(origen, destino)
 
         self.trayectos[nombre] = Trayecto(nombre, ruta)

@@ -56,6 +56,19 @@ class MotorDeRutasTest(unittest.TestCase):
             self.assertEqual(['Buenos Aires', 'Quilmes', 'La Plata', 'Tandil'], trayecto.obtener_ciudades())
             self.assertGreater(trayecto.distaciaTotal, distancia)
             self.assertGreater(trayecto.tiempoTotal, tiempo)
+    def test_agrega_parada_antes_de_la_primera_ciudad_al_trayecto(self):
+        with vcr.use_cassette('fixtures/test_agrega_parada_antes_de_la_primera_ciudad_al_trayecto.yaml'):
+            trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
+            self.motor.agregar_ciudad(trayecto.nombre, 'Tandil')
+
+            distancia = trayecto.distaciaTotal
+            tiempo = trayecto.tiempoTotal
+
+            self.motor.agregar_parada(trayecto.nombre, 'Buenos Aires', 'Quilmes')
+
+            self.assertEqual(['Quilmes', 'Buenos Aires', 'La Plata', 'Tandil'], trayecto.obtener_ciudades())
+            self.assertGreater(trayecto.distaciaTotal, distancia)
+            self.assertGreater(trayecto.tiempoTotal, tiempo)
     def test_concatena_trayectos(self):
         with vcr.use_cassette('fixtures/test_concatena_trayectos.yaml'):
             trayectoInicial = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'trayecto_inicial')

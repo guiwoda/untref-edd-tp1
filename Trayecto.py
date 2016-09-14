@@ -33,6 +33,8 @@ class Trayecto:
         for ruta in self.rutas:
             if ruta.destino == ciudad:
                 return ruta
+            elif self.rutas[0].origen == ciudad:
+                return self.rutas[0]
 
     def obtener_ciudades(self):
         return [ruta.origen for ruta in self.rutas] + [self.rutas[-1].destino]

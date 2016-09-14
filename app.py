@@ -111,7 +111,7 @@ def guardar():
 def cargar():
     motor.cargar_de_disco()
 
-    return "Trayectos cargados: %s" % motor.trayectos
+    return "Trayectos cargados: %s" % str(motor.listar())
 
 def salir():
     if not motor.esta_guardado():

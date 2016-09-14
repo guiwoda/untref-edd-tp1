@@ -89,22 +89,18 @@ class MotorDeRutas:
         if not trayecto.ciudad_existe(existente):
             raise TrayectoException.ciudad_inexistente_en_trayecto(existente, trayecto)
 
-        #Manejando caso de Ciudad Intermedia es origen del Trayecto
-        if trayecto.rutas[0].origen == existente:
+        if trayecto.primera_ciudad() == existente:
+            rutaHaciaExistente = self.obtener_ruta(parada, trayecto.primera_ciudad())
+            trayecto.rutas = [rutaHaciaExistente] + trayecto.rutas
+        else:
             rutaActual = trayecto.obtener_ruta_con_destino_en(existente)
-            rutaDeParadaHaciaExistente = self.obtener_ruta(parada, rutaActual.origen)
-            trayecto.rutas = [rutaDeParadaHaciaExistente] + trayecto.rutas[:]
-            trayecto.actualizar_totales()
-            return trayecto
 
-        rutaActual = trayecto.obtener_ruta_con_destino_en(existente)
+            rutaHaciaParada = self.obtener_ruta(rutaActual.origen, parada)
+            rutaHaciaExistente = self.obtener_ruta(parada, existente)
 
-        rutaHaciaParada = self.obtener_ruta(rutaActual.origen, parada)
-        rutaHaciaExistente = self.obtener_ruta(parada, existente)
+            i = trayecto.rutas.index(rutaActual)
+            trayecto.rutas = trayecto.rutas[:i] + [rutaHaciaParada, rutaHaciaExistente] + trayecto.rutas[i + 1:]
 
-        posicion = trayecto.rutas.index(rutaActual)
-
-        trayecto.rutas = trayecto.rutas[:posicion] + [rutaHaciaParada, rutaHaciaExistente] + trayecto.rutas[posicion + 1:]
         trayecto.actualizar_totales()
 
         return trayecto

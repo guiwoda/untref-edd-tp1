@@ -90,16 +90,16 @@ class MotorDeRutas:
             raise TrayectoException.ciudad_inexistente_en_trayecto(existente, trayecto)
 
         if trayecto.primera_ciudad() == existente:
-            rutaHaciaExistente = self.obtener_ruta(parada, trayecto.primera_ciudad())
-            trayecto.rutas = [rutaHaciaExistente] + trayecto.rutas
+            ruta_hacia_existente = self.obtener_ruta(parada, trayecto.primera_ciudad())
+            trayecto.rutas = [ruta_hacia_existente] + trayecto.rutas
         else:
-            rutaActual = trayecto.obtener_ruta_con_destino_en(existente)
+            ruta_actual = trayecto.obtener_ruta_con_destino_en(existente)
 
-            rutaHaciaParada = self.obtener_ruta(rutaActual.origen, parada)
-            rutaHaciaExistente = self.obtener_ruta(parada, existente)
+            ruta_hacia_parada = self.obtener_ruta(ruta_actual.origen, parada)
+            ruta_hacia_existente = self.obtener_ruta(parada, existente)
 
-            i = trayecto.rutas.index(rutaActual)
-            trayecto.rutas = trayecto.rutas[:i] + [rutaHaciaParada, rutaHaciaExistente] + trayecto.rutas[i + 1:]
+            i = trayecto.rutas.index(ruta_actual)
+            trayecto.rutas = trayecto.rutas[:i] + [ruta_hacia_parada, ruta_hacia_existente] + trayecto.rutas[i + 1:]
 
         trayecto.actualizar_totales()
 
@@ -115,15 +115,15 @@ class MotorDeRutas:
         :type final: str
         :rtype: Trayecto
         """
-        trayectoInicial = self.obtener_trayecto(inicial)
-        trayectoFinal = self.obtener_trayecto(final)
+        trayecto_inicial = self.obtener_trayecto(inicial)
+        trayecto_final = self.obtener_trayecto(final)
 
-        conexion = self.obtener_ruta(trayectoInicial.ultima_ciudad(), trayectoFinal.primera_ciudad())
+        conexion = self.obtener_ruta(trayecto_inicial.ultima_ciudad(), trayecto_final.primera_ciudad())
 
-        trayectoInicial.rutas = trayectoInicial.rutas + [conexion] + trayectoFinal.rutas
-        trayectoInicial.actualizar_totales()
+        trayecto_inicial.rutas = trayecto_inicial.rutas + [conexion] + trayecto_final.rutas
+        trayecto_inicial.actualizar_totales()
 
-        return trayectoInicial
+        return trayecto_inicial
 
     def comparar(self, trayecto, otroTrayecto, tipo):
         """Comparar dos trayectos.
@@ -259,32 +259,32 @@ class MotorDeRutas:
 
         return self.trayectos[nombre]
 
-    def comparar_distancias(self, trayecto, otroTrayecto):
+    def comparar_distancias(self, trayecto_a, trayecto_b):
         """Compara la distancia entre dos trayectos.
 
         Devuelve -1 si el primero es más corto que el segundo, 1 si es más largo y 0 si son iguales.
 
-        :type trayecto: str
-        :type otroTrayecto: str
+        :type trayecto_a: str
+        :type trayecto_b: str
         :rtype: int
         """
 
-        trayecto = self.obtener_trayecto(trayecto)
-        otroTrayecto = self.obtener_trayecto(otroTrayecto)
+        trayecto_a = self.obtener_trayecto(trayecto_a)
+        trayecto_b = self.obtener_trayecto(trayecto_b)
 
-        return (trayecto.distancia_total > otroTrayecto.distancia_total) - (trayecto.distancia_total < otroTrayecto.distancia_total)
+        return (trayecto_a.distancia_total > trayecto_b.distancia_total) - (trayecto_a.distancia_total < trayecto_b.distancia_total)
 
-    def comparar_tiempo(self, trayecto, otroTrayecto):
+    def comparar_tiempo(self, trayecto_a, trayecto_b):
         """Compara el tiempo entre dos trayectos.
 
         Devuelve -1 si el primero es más rápido que el segundo, 1 si es más lento y 0 si son iguales.
 
-        :type trayecto: str
-        :type otroTrayecto: str
+        :type trayecto_a: str
+        :type trayecto_b: str
         :rtype: int
         """
 
-        trayecto = self.obtener_trayecto(trayecto)
-        otroTrayecto = self.obtener_trayecto(otroTrayecto)
+        trayecto_a = self.obtener_trayecto(trayecto_a)
+        trayecto_b = self.obtener_trayecto(trayecto_b)
 
-        return (trayecto.tiempo_total > otroTrayecto.tiempo_total) - (trayecto.tiempo_total < otroTrayecto.tiempo_total)
+        return (trayecto_a.tiempo_total > trayecto_b.tiempo_total) - (trayecto_a.tiempo_total < trayecto_b.tiempo_total)

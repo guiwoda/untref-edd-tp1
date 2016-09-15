@@ -71,11 +71,11 @@ class MotorDeRutasTest(unittest.TestCase):
             self.assertGreater(trayecto.tiempo_total, tiempo)
     def test_concatena_trayectos(self):
         with vcr.use_cassette('fixtures/test_concatena_trayectos.yaml'):
-            trayectoInicial = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'trayecto_inicial')
-            trayectoFinal = self.motor.crear_trayecto('Quilmes', 'Tandil', 'trayecto_final')
-            self.motor.concatenar(trayectoInicial.nombre, trayectoFinal.nombre)
+            trayecto_inicial = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'trayecto_inicial')
+            trayecto_final = self.motor.crear_trayecto('Quilmes', 'Tandil', 'trayecto_final')
+            self.motor.concatenar(trayecto_inicial.nombre, trayecto_final.nombre)
 
-            self.assertEqual(['Buenos Aires', 'La Plata', 'Quilmes', 'Tandil'], trayectoInicial.obtener_ciudades())
+            self.assertEqual(['Buenos Aires', 'La Plata', 'Quilmes', 'Tandil'], trayecto_inicial.obtener_ciudades())
 
     def test_obtiene_trayectos_por_nombre(self):
         with vcr.use_cassette('fixtures/test_obtiene_trayectos_por_nombre.yaml'):

@@ -6,130 +6,140 @@ from cursesmenu.items import *
 from MessageException import MessageException
 from MotorDeRutas import MotorDeRutas
 
-motor = MotorDeRutas()
-menu = CursesMenu("Estructura de datos - TP 1 | Guido Contreras Woda - Teresa Alberto", "Opciones:")
 
-def FnItem(title, func):
-    return FunctionItem(title, do_wait(func))
+class App:
 
-def do_wait(func, wait=3):
-    def do():
-        try:
-            print(func())
-            sleep(wait)
-        except MessageException as e:
-            print(e.message)
-            sleep(wait)
-            do()
-    return do
+    def __init__(self, motor, menu):
+        '''
+        :type motor: MotorDeRutas
+        :type menu: CursesMenu
+        '''
+        self.motor = motor
+        self.menu = menu
 
-def crear_trayecto():
-    nombre = input('Ingrese nombre del trayecto: ')
-    origen = input('Ciudad origen? ')
-    destino = input('Ciudad destino? ')
+    def __create_function_item(self, title, func):
+        return FunctionItem(title, self.__do_wait(func))
 
-    motor.crear_trayecto(origen, destino, nombre)
+    def __do_wait(self, func, wait=3):
+        def _do():
+            try:
+                print(func())
+                sleep(wait)
+            except MessageException as e:
+                print(e.message)
+                sleep(wait)
+                _do()
+        return _do
 
-    return "Trayecto [%s] creado." % nombre
+    def __crear_trayecto(self):
+        nombre = input('Ingrese nombre del trayecto: ')
+        origen = input('Ciudad origen? ')
+        destino = input('Ciudad destino? ')
 
-def agregar_ciudad():
-    if not motor.trayectos:
-        return "No hay trayectos disponibles."
+        self.motor.crear_trayecto(origen, destino, nombre)
 
-    trayecto = input('Ingrese nombre del trayecto: ')
-    ciudad = input('Ciudad a agregar? ')
+        return "Trayecto [%s] creado." % nombre
 
-    motor.agregar_ciudad(trayecto, ciudad)
+    def __agregar_ciudad(self):
+        if not self.motor.trayectos:
+            return "No hay trayectos disponibles."
 
-    return "Ciudad [%s] agregada a [%s]" % (ciudad, trayecto)
+        trayecto = input('Ingrese nombre del trayecto: ')
+        ciudad = input('Ciudad a agregar? ')
 
-def agregar_parada():
-    if not motor.trayectos:
-        return "No hay trayectos disponibles."
+        self.motor.agregar_ciudad(trayecto, ciudad)
 
-    trayecto = input('Ingrese nombre del trayecto: ')
-    existente = input('Ciudad existente del trayecto? ')
-    parada = input('Ciudad a agregar? ')
+        return "Ciudad [%s] agregada a [%s]" % (ciudad, trayecto)
 
-    motor.agregar_parada(trayecto, existente, parada)
+    def __agregar_parada(self):
+        if not self.motor.trayectos:
+            return "No hay trayectos disponibles."
 
-    return "Ciudad [%s] agregada antes de [%s] a [%s]" % (parada, existente, trayecto)
+        trayecto = input('Ingrese nombre del trayecto: ')
+        existente = input('Ciudad existente del trayecto? ')
+        parada = input('Ciudad a agregar? ')
 
-def concatenar():
-    if len(motor.trayectos) < 2:
-        return "No hay suficientes trayectos disponibles."
+        self.motor.agregar_parada(trayecto, existente, parada)
 
-    inicial = input('Ingrese trayecto inicial: ')
-    final = input('Ingrese trayecto final: ')
+        return "Ciudad [%s] agregada antes de [%s] a [%s]" % (parada, existente, trayecto)
 
-    motor.concatenar(inicial, final)
+    def __concatenar(self):
+        if len(self.motor.trayectos) < 2:
+            return "No hay suficientes trayectos disponibles."
 
-    return "Trayectos [%s] concatenado al final de [%s]." % (final, inicial)
+        inicial = input('Ingrese trayecto inicial: ')
+        final = input('Ingrese trayecto final: ')
 
-def comparar():
-    if len(motor.trayectos) < 2:
-        return "No hay suficientes trayectos disponibles."
+        self.motor.concatenar(inicial, final)
 
-    a = input('Ingrese trayecto: ')
-    b = input('Ingrese trayecto a comparar: ')
-    options = ['distancia', 'tiempo']
-    tipo = options[SelectionMenu.get_selection(options, 'Como comparo?', exit_option=False)]
+        return "Trayectos [%s] concatenado al final de [%s]." % (final, inicial)
 
-    mensajes = {
-        -1: '%s es menor que %s',
-        0:  '%s y %s son iguales',
-        1:  '%s es mayor que %s',
-    }
+    def __comparar(self):
+        if len(self.motor.trayectos) < 2:
+            return "No hay suficientes trayectos disponibles."
 
-    return mensajes[motor.comparar(a, b, tipo[0])] % (a, b)
+        a = input('Ingrese trayecto: ')
+        b = input('Ingrese trayecto a comparar: ')
+        options = ['distancia', 'tiempo']
+        tipo = options[SelectionMenu.get_selection(options, 'Como comparo?', exit_option=False)]
 
-def mostrar():
-    if not motor.trayectos:
-        return "No hay trayectos disponibles."
+        mensajes = {
+            -1: '%s es menor que %s',
+            0:  '%s y %s son iguales',
+            1:  '%s es mayor que %s',
+        }
 
-    trayecto = input('Ingrese trayecto: ')
+        return mensajes[self.motor.comparar(a, b, tipo[0])] % (a, b)
 
-    return motor.mostrar(trayecto)
+    def __mostrar(self):
+        if not self.motor.trayectos:
+            return "No hay trayectos disponibles."
 
-def mostrar_rutas():
-    if not motor.trayectos:
-        return "No hay trayectos disponibles."
+        trayecto = input('Ingrese trayecto: ')
 
-    trayecto = input('Ingrese trayecto: ')
+        return self.motor.mostrar(trayecto)
 
-    return motor.mostrar_rutas(trayecto)
+    def __mostrar_rutas(self):
+        if not self.motor.trayectos:
+            return "No hay trayectos disponibles."
 
-def listar():
-    return str(motor.listar()) if motor.trayectos else "No hay trayectos."
+        trayecto = input('Ingrese trayecto: ')
 
-def guardar():
-    trayecto = input('Trayecto a guardar? (Enter para guardar todo) ')
-    motor.guardar(trayecto)
+        return self.motor.mostrar_rutas(trayecto)
 
-    return "Trayecto%s guardado%s" % ((" ["+trayecto+"]", "") if trayecto else ("s","s"))
+    def __listar(self):
+        return str(self.motor.listar()) if self.motor.trayectos else "No hay trayectos."
 
-def cargar():
-    motor.cargar_de_disco()
+    def __guardar(self):
+        trayecto = input('Trayecto a guardar? (Enter para guardar todo) ')
+        self.motor.guardar(trayecto)
 
-    return "Trayectos cargados: %s" % str(motor.listar())
+        return "Trayecto%s guardado%s" % ((" ["+trayecto+"]", "") if trayecto else ("s", "s"))
 
-def salir():
-    if not motor.esta_guardado():
-        motor.guardar()
-    return "Adios"
+    def __cargar(self):
+        self.motor.cargar_de_disco()
 
-# Create the menu
-menu.append_item(FnItem("Crear trayecto", crear_trayecto))
-menu.append_item(FnItem("Agregar ciudad", agregar_ciudad))
-menu.append_item(FnItem("Agregar ciudad intermedia", agregar_parada))
-menu.append_item(FnItem("Concatenar trayectos", concatenar))
-menu.append_item(FnItem("Comparar trayectos", comparar))
-menu.append_item(FnItem("Mostrar trayecto", mostrar))
-menu.append_item(FnItem("Mostrar rutas", mostrar_rutas))
-menu.append_item(FnItem("Listar", listar))
-menu.append_item(FnItem("Guardar", guardar))
-menu.append_item(FnItem("Cargar de disco", cargar))
-menu.append_item(FnItem("Salir", salir))
-menu.show_exit_option = False
+        return "Trayectos cargados: %s" % str(self.motor.listar())
 
-menu.show()
+    def __salir(self):
+        if not self.motor.esta_guardado():
+            self.motor.guardar()
+        return "Adios"
+
+    def main(self):
+        self.menu.append_item(self.__create_function_item("Crear trayecto", self.__crear_trayecto))
+        self.menu.append_item(self.__create_function_item("Agregar ciudad", self.__agregar_ciudad))
+        self.menu.append_item(self.__create_function_item("Agregar ciudad intermedia", self.__agregar_parada))
+        self.menu.append_item(self.__create_function_item("Concatenar trayectos", self.__concatenar))
+        self.menu.append_item(self.__create_function_item("Comparar trayectos", self.__comparar))
+        self.menu.append_item(self.__create_function_item("Mostrar trayecto", self.__mostrar))
+        self.menu.append_item(self.__create_function_item("Mostrar rutas", self.__mostrar_rutas))
+        self.menu.append_item(self.__create_function_item("Listar", self.__listar))
+        self.menu.append_item(self.__create_function_item("Guardar", self.__guardar))
+        self.menu.append_item(self.__create_function_item("Cargar de disco", self.__cargar))
+        self.menu.append_item(MenuItem("Salir", should_exit=True))
+        self.menu.show_exit_option = False
+        self.menu.show()
+
+if __name__ == '__main__':
+    App(MotorDeRutas(), CursesMenu("Estructura de datos - TP 1 | Guido Contreras Woda - Teresa Alberto", "Opciones:")).main()

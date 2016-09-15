@@ -1,5 +1,3 @@
-import math
-
 from ConversorUnidades import ConversorUnidades
 
 

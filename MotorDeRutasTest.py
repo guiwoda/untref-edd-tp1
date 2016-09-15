@@ -27,14 +27,14 @@ class MotorDeRutasTest(unittest.TestCase):
     def test_agrega_ciudad_a_trayecto(self):
         with vcr.use_cassette('fixtures/test_agrega_ciudad_a_trayecto.yaml'):
             trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
-            distancia = trayecto.distaciaTotal
-            tiempo = trayecto.tiempoTotal
+            distancia = trayecto.distancia_total
+            tiempo = trayecto.tiempo_total
 
             self.motor.agregar_ciudad(trayecto.nombre, 'Quilmes')
 
             self.assertEqual('Quilmes', trayecto.ultima_ciudad())
-            self.assertGreater(trayecto.distaciaTotal, distancia)
-            self.assertGreater(trayecto.tiempoTotal, tiempo)
+            self.assertGreater(trayecto.distancia_total, distancia)
+            self.assertGreater(trayecto.tiempo_total, tiempo)
 
     def test_falla_cuando_la_ciudad_no_existe_en_trayecto(self):
         with vcr.use_cassette('fixtures/test_falla_cuando_la_ciudad_no_existe_en_trayecto.yaml'):
@@ -48,27 +48,27 @@ class MotorDeRutasTest(unittest.TestCase):
             trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
             self.motor.agregar_ciudad(trayecto.nombre, 'Tandil')
 
-            distancia = trayecto.distaciaTotal
-            tiempo = trayecto.tiempoTotal
+            distancia = trayecto.distancia_total
+            tiempo = trayecto.tiempo_total
 
             self.motor.agregar_parada(trayecto.nombre, 'La Plata', 'Quilmes')
 
             self.assertEqual(['Buenos Aires', 'Quilmes', 'La Plata', 'Tandil'], trayecto.obtener_ciudades())
-            self.assertGreater(trayecto.distaciaTotal, distancia)
-            self.assertGreater(trayecto.tiempoTotal, tiempo)
+            self.assertGreater(trayecto.distancia_total, distancia)
+            self.assertGreater(trayecto.tiempo_total, tiempo)
     def test_agrega_parada_antes_de_la_primera_ciudad_al_trayecto(self):
         with vcr.use_cassette('fixtures/test_agrega_parada_antes_de_la_primera_ciudad_al_trayecto.yaml'):
             trayecto = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'bs_as_la_plata')
             self.motor.agregar_ciudad(trayecto.nombre, 'Tandil')
 
-            distancia = trayecto.distaciaTotal
-            tiempo = trayecto.tiempoTotal
+            distancia = trayecto.distancia_total
+            tiempo = trayecto.tiempo_total
 
             self.motor.agregar_parada(trayecto.nombre, 'Buenos Aires', 'Quilmes')
 
             self.assertEqual(['Quilmes', 'Buenos Aires', 'La Plata', 'Tandil'], trayecto.obtener_ciudades())
-            self.assertGreater(trayecto.distaciaTotal, distancia)
-            self.assertGreater(trayecto.tiempoTotal, tiempo)
+            self.assertGreater(trayecto.distancia_total, distancia)
+            self.assertGreater(trayecto.tiempo_total, tiempo)
     def test_concatena_trayectos(self):
         with vcr.use_cassette('fixtures/test_concatena_trayectos.yaml'):
             trayectoInicial = self.motor.crear_trayecto('Buenos Aires', 'La Plata', 'trayecto_inicial')

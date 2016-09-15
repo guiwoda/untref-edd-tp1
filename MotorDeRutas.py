@@ -272,7 +272,7 @@ class MotorDeRutas:
         trayecto = self.obtener_trayecto(trayecto)
         otroTrayecto = self.obtener_trayecto(otroTrayecto)
 
-        return (trayecto.distaciaTotal > otroTrayecto.distaciaTotal) - (trayecto.distaciaTotal < otroTrayecto.distaciaTotal)
+        return (trayecto.distancia_total > otroTrayecto.distancia_total) - (trayecto.distancia_total < otroTrayecto.distancia_total)
 
     def comparar_tiempo(self, trayecto, otroTrayecto):
         """Compara el tiempo entre dos trayectos.
@@ -287,4 +287,4 @@ class MotorDeRutas:
         trayecto = self.obtener_trayecto(trayecto)
         otroTrayecto = self.obtener_trayecto(otroTrayecto)
 
-        return (trayecto.tiempoTotal > otroTrayecto.tiempoTotal) - (trayecto.tiempoTotal < otroTrayecto.tiempoTotal)
+        return (trayecto.tiempo_total > otroTrayecto.tiempo_total) - (trayecto.tiempo_total < otroTrayecto.tiempo_total)

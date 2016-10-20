@@ -117,7 +117,7 @@ class App:
         return "Trayecto%s guardado%s" % ((" ["+trayecto+"]", "") if trayecto else ("s", "s"))
 
     def __cargar(self):
-        self.motor.cargar_de_disco()
+        self.motor.recuperar()
 
         return "Trayectos cargados: %s" % str(self.motor.listar())
 
